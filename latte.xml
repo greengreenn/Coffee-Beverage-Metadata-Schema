@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coffeeBeverage xmlns="http://coffeeschema.example.org/"
+                xmlns:coffee="http://coffeeschema.example.org/"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://coffeeschema.example.org/ coffee_schema.xsd">
+  
+  <dc:title>Caffè Latte</dc:title>
+  <dc:description>A smooth and creamy espresso-based drink with a light layer of milk foam.</dc:description>
+  <coffee:beverageType>espresso-based</coffee:beverageType>
+  <coffee:recipeIngredient>Espresso</coffee:recipeIngredient>
+  <coffee:recipeIngredient>Milk</coffee:recipeIngredient>
+  <coffee:prepTime>PT1M30S</coffee:prepTime> 
+  <coffee:servingSize>Tall</coffee:servingSize>
+  <coffee:base>milk</coffee:base>
+  <coffee:foamLevel>light</coffee:foamLevel>
+  <coffee:sweetnessLevel>1</coffee:sweetnessLevel>
+  <coffee:beginnerFriendly>false</coffee:beginnerFriendly>
+  <coffee:temperature>both</coffee:temperature>
+  <coffee:visualAppearance>creamy-white</coffee:visualAppearance>
+  <coffee:visualAppearance>light-golden</coffee:visualAppearance>
+</coffeeBeverage>
