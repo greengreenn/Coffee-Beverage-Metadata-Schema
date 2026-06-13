@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://coffeeschema.example.org/"
+           xmlns:schema="https://schema.org/"
+           xmlns="http://coffeeschema.example.org/"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           elementFormDefault="qualified">
+
+  <xs:import namespace="http://purl.org/dc/elements/1.1/" 
+             schemaLocation="https://www.dublincore.org/schemas/xmls/qdc/2008/02/11/dc.xsd"/>
+
+
+  <!-- Root Element -->
+  <!-- a. This schema was developed to explain coffee drinks commonly served in cafes to unfamiliar customers.  
+  b. I used ChatGPT, Claude, and Gemeni to review XSD syntax, control vocabulary, and select data types. -->
+  <xs:element name="coffeeBeverage">
+    <xs:complexType>
+      <xs:sequence>
+
+        <!-- 1. dc:title | Mandatory, non-repeatable -->
+        <!-- a. The Dublin Core element dc:title is used as the primary title to identify and describe a coffee beverage. 
+        Because coffee menus vary widely across cafés and new drinks are frequently introduced, no controlled vocabulary restriction was applied. -->
+        <xs:element ref="dc:title" minOccurs="1" maxOccurs="1">
+         <xs:annotation>
+          <xs:documentation>The official name of the coffee beverage as listed on the menu.</xs:documentation>
+         </xs:annotation>
+        </xs:element>
+
+        <!-- 2. dc:description | Mandatory, non-repeatable -->
+        <!-- a. The Dublin Core element dc:description is used to provide a brief textual description of the beverage. 
+        Since descriptions differ for every menu item, no controlled vocabulary restriction was applied.-->
+        <xs:element ref="dc:description" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>A general textual description of the beverage for introductory purposes.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+        <!-- 3. coffee:beverageType | Mandatory, non-repeatable --> 
+        <!-- a. It was created to distinguish standard coffee beverages from specialty or dessert-style drinks such as affogato.  
+        This element was designed as a locally defined vocabulary to allow flexibility in categorization. -->
+        <!-- b. An AI assistant was consulted to understand possible schema structures for implementing this type of classification, 
+        but the final design and vocabulary choices were modified and selected manually.-->
+        <!-- Controlled vocabulary: espresso-based | cold brew-based | blended | dessert-style -->
+        <xs:element name="beverageType" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>The broad category of the beverage, classifying it by primary preparation style or base ingredient.</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="espresso-based"/>
+              <xs:enumeration value="cold brew-based"/>
+              <xs:enumeration value="blended"/>
+              <xs:enumeration value="dessert-style"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+        <!-- 4. schema:recipeIngredient | Mandatory, repeatable (e.g., 'espresso', 'steamed milk', 'vanilla syrup') -->
+        <!-- a. This element is conceptually aligned with schema.org/recipeIngredient, but is declared locally because schema.org does not provide an importable XSD.
+        Because ingredient combinations vary greatly across drinks, the value is stored as a string without a controlled vocabulary restriction.-->
+        <!-- b. AI assistant was used for guidance on using minOccurs and maxOccurs when allowing multiple values. The answer was to use maxOccurs="unbounded". -->  
+        <xs:element name="recipeIngredient" type="xs:string" minOccurs="1" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>A list of key ingredients used in preparing the beverage.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+        <!-- 5. schema:prepTime | Optional, non-repeatable, -->
+        <!-- a. This element is conceptually aligned with schema.org/prepTime, but is declared locally because schema.org does not provide an importable XSD. 
+        The schema:prepTime element records the typical preparation time required to make the beverage. 
+        Since preparation time is represented as a numerical value (measured in minutes), the xs:duration type was chosen to support consistent data entry and validation. 
+        This is based on the preparation time of an average cafe. I set it as optional for fast-prepared drinks like Americanos, as their preparation time is not that important.-->
+        <!-- b. An AI assistant was consulted to review the representation of preparation time. 
+        The original design stored values as free-text strings (e.g., "1m 30s"). 
+        Based on the feedback received, this schema was revised to follow the ISO 8601 Duration standard.-->
+        <xs:element name="prepTime" type="xs:duration" minOccurs="0" maxOccurs="1">
+         <xs:annotation>
+          <xs:documentation>The typical preparation time required to make the beverage formatted as an ISO 8601 duration (e.g., PT3M for 3 minutes).</xs:documentation>
+        </xs:annotation>
+       </xs:element>
+
+        <!-- 6. schema:servingSize | Optional, non-repeatable -->
+        <!-- a. This element is conceptually aligned with schema.org/servingSize, but is declared locally because schema.org does not provide an importable XSD.
+        This element represents beverage size. The original design used numerical measurements such as “16 oz,” but through the feedback in class, it was revised to use commonly recognized café size names because they are easier for users to understand. 
+        Beverage size is included because it helps distinguish drinks that are traditionally served in different volumes, such as a flat white and a latte.-->
+        <xs:element name="servingSize" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>The standard serving size or volume of the beverage based on Starbucks size standards (Short, Tall, Grande, Venti).</xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="Short"/>
+              <xs:enumeration value="Tall"/>
+              <xs:enumeration value="Grande"/>
+              <xs:enumeration value="Venti"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+        <!-- 7. coffee:base | Mandatory, non-repeatable -->
+        <!-- a. This element describes the base of the beverage. To keep the schema simple and focused on common coffee drinks, only 4 controlled vocabulary values are provided. 
+        (Special cases such as oat-based beverages are not included in the current version of the schema.)
+        The value none is used to represent espresso-based drinks without an additional base.-->
+        <!-- Controlled vocabulary: water | milk | ice cream | none -->
+        <xs:element name="base" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>The primary liquid or structural base of the beverage. </xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="water"/>
+              <xs:enumeration value="milk"/>
+              <xs:enumeration value="ice cream"/>
+              <xs:enumeration value="none"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+        <!-- 8. coffee:foamLevel | Optional, non-repeatable -->
+        <!-- a. This element was added to distinguish beverages such as flat whites, lattes, and cappuccinos, which differ primarily in milk foam texture and thickness. 
+        A controlled vocabulary was used because the possible values are limited and well defined.
+        Only used for drinks that contain milk -->
+        <!-- Controlled vocabulary: light | medium | heavy -->
+         <xs:element name="foamLevel" minOccurs="0" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>A controlled descriptor indicating the thickness and quantity of foam present on the surface of the beverage. </xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="light"/>
+              <xs:enumeration value="medium"/>
+              <xs:enumeration value="heavy"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+        <!-- 9. coffee:sweetnessLevel | Mandatory, non-repeatable -->
+        <!-- a. This element represents the sweetness level of a beverage. 
+        Because sweetness is measured on a scale from 1 to 5, the xs:integer type was chosen to enforce numerical consistency and validation.-->
+        <!-- Integer scale 1-5 -->
+        <xs:element name="sweetnessLevel" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>A scale-based rating of the overall sweetness of the beverage as typically prepared. </xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:integer">
+              <xs:minInclusive value="1"/>
+              <xs:maxInclusive value="5"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+        <!-- 10. coffee:beginnerFriendly | Mandatory, non-repeatable -->
+        <!-- a. A Boolean type is used to indicate whether a beverage is suitable for beginners. 
+        This allows users to quickly determine whether a drink is beginner-friendly through a simple true/false value. -->
+        <!-- b.I asked the AI ​​"if it would be okay to use a Boolean type for this element", and I received a reply that it is suitable to use. -->
+        <!-- Boolean: true | false -->
+        <xs:element name="beginnerFriendly" type="xs:boolean" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>A boolean indicator of whether the beverage is considered accessible and approachable for users with little or no prior experience with coffee. </xs:documentation>
+          </xs:annotation>
+        </xs:element>
+
+        <!-- 11. coffee:temperature | Mandatory, non-repeatable -->
+        <!-- a. A controlled vocabulary is used for beverage temperature because only three valid values are allowed: 
+        hot, iced, and both (both for beverages that can be served either way, such as an Americano).-->
+        <!-- Controlled vocabulary: hot | iced | both -->
+        <xs:element name="temperature" minOccurs="1" maxOccurs="1">
+          <xs:annotation>
+            <xs:documentation>The serving temperature of the beverage as typically offered in a cafe setting. </xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="hot"/>  
+              <xs:enumeration value="iced"/> 
+              <xs:enumeration value="both"/> 
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+        <!-- 12. coffee:visualAppearance | Optional, repeatable -->
+        <!-- a. This optional element was added to provide additional visual information about the appearance of a beverage. 
+        It is optional for identifying the drink, but it may help users recognize beverages based on their presentation. 
+        A controlled vocabulary was initially chosen to maintain consistency; however, a free-text string could also be appropriate in future revisions. -->
+        <!-- b. AI assistant was consulted for suggestions regarding possible controlled vocabulary values-->
+        <!-- Controlled vocabulary: layered | creamy-white | dark-brown | light-golden | foam-topped -->
+        <xs:element name="visualAppearance" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation>A controlled descriptor of the beverage's primary visual characteristics as observed when served. </xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="layered"/>
+              <xs:enumeration value="creamy-white"/>
+              <xs:enumeration value="dark-brown"/>
+              <xs:enumeration value="light-golden"/>
+              <xs:enumeration value="foam-topped"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
