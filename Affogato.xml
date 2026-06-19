@@ -4,17 +4,25 @@
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://coffeeschema.example.org/ coffee_schema.xsd">
-  
-  <dc:title>Affogato</dc:title>
-  <dc:description>A classic dessert-style beverage featuring a scoop of vanilla ice cream with a shot of espresso.</dc:description>
-  <coffee:beverageType>dessert-style</coffee:beverageType>
-  <coffee:recipeIngredient>Ice Cream</coffee:recipeIngredient>
-  <coffee:recipeIngredient>Espresso</coffee:recipeIngredient>
-  <coffee:prepTime>PT2M</coffee:prepTime>
-  <coffee:servingSize>Short</coffee:servingSize>
-  <coffee:base>ice cream</coffee:base>
-  <coffee:sweetnessLevel>4</coffee:sweetnessLevel>
-  <coffee:beginnerFriendly>true</coffee:beginnerFriendly>
-  <coffee:temperature>iced</coffee:temperature>
-  
+
+  <coffee:coffeeBeverageInfo>
+    <dc:title>Affogato</dc:title>
+    <dc:description>A classic dessert-style beverage featuring a scoop of vanilla ice cream with a shot of espresso.</dc:description>
+    <coffee:beverageType>dessert-style</coffee:beverageType>
+    <coffee:temperature>iced</coffee:temperature>
+    <coffee:servingSize>Short</coffee:servingSize>
+    <coffee:base>ice-cream</coffee:base>
+  </coffee:coffeeBeverageInfo>
+
+  <coffee:coffeeBeveragePreparation>
+    <coffee:recipeIngredient>Ice Cream</coffee:recipeIngredient>
+    <coffee:recipeIngredient>Espresso</coffee:recipeIngredient>
+    <coffee:prepTime>PT2M</coffee:prepTime>
+  </coffee:coffeeBeveragePreparation>
+
+  <coffee:coffeeBeverageForCustomer>
+    <coffee:sweetnessLevel>4</coffee:sweetnessLevel>
+    <coffee:beginnerFriendly>true</coffee:beginnerFriendly>
+  </coffee:coffeeBeverageForCustomer>
+
 </coffeeBeverage>
